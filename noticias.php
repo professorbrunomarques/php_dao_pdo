@@ -7,5 +7,5 @@ include_once './Config.php';
 //$noticias = Noticias::listarNoticias();
 //echo json_encode($noticias);
 
-//$noticia = Noticias::buscar("Mussum");
-//echo json_encode($noticia);
+$noticia = Noticias::buscar("Mussum");
+echo json_encode($noticia);
