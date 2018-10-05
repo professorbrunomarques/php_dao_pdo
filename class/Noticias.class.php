@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Description of Noticias
  *
  * @author bruno
  */
 class Noticias {
-    
+
     private $id;
     private $titulo_noticia;
     private $url_noticia;
@@ -14,59 +15,63 @@ class Noticias {
     private $texto_noticia;
     private $cat_id_noticia;
     private $foto_destaque_noticia;
-    
+
     public function __toString() {
         return json_encode(array(
-            "id"=> $this->getId_noticia(),
-            "titulo_noticia"=> $this->getTitulo_noticia(),
-            "url_noticia"=> $this->getUrl_noticia(),
-            "data_noticia"=> $this->getData_noticia()->format("d/m/Y H:i:s"),
-            "autor_noticia"=> $this->getAutor_noticia(),
-            "texto_noticia"=> $this->getTexto_noticia(),
-            "cat_id_noticia"=> $this->getCat_id_noticia(),
-            "foto_destaque_noticia"=> $this->getFoto_destaque_noticia()
+            "id" => $this->getId_noticia(),
+            "titulo_noticia" => $this->getTitulo_noticia(),
+            "url_noticia" => $this->getUrl_noticia(),
+            "data_noticia" => $this->getData_noticia()->format("d/m/Y H:i:s"),
+            "autor_noticia" => $this->getAutor_noticia(),
+            "texto_noticia" => $this->getTexto_noticia(),
+            "cat_id_noticia" => $this->getCat_id_noticia(),
+            "foto_destaque_noticia" => $this->getFoto_destaque_noticia()
         ));
     }
-    
+
     public function noticiaByid($id) {
         $sql = new Sql();
-        
-        $resultados = $sql->select("SELECT * FROM noticias WHERE id = :ID",array(
-            ":ID"=>$id
+
+        $resultados = $sql->select("SELECT * FROM noticias WHERE id = :ID", array(
+            ":ID" => $id
         ));
-        
-        if(count($resultados)>0):
-            $linha = $resultados[0];
-            $this->setId_noticia($linha["id"]);
-            $this->setAutor_noticia($linha["autor_noticia"]);
-            $this->setCat_id_noticia($linha["cat_id_noticia"]);
-            $this->setFoto_destaque_noticia($linha["foto_destaque_noticia"]);
-            $this->setTexto_noticia($linha["texto_noticia"]);
-            $this->setTitulo_noticia($linha["titulo_noticia"]);
-            $this->setUrl_noticia($linha["url_noticia"]);
-            $this->setData_noticia(new DateTime($linha["data_noticia"]));
-            
+
+        if (count($resultados) > 0):
+            // Se houver resultado insira os dados nos atributos da classe
+            $this->setDados($resultados[0]);
         endif;
     }
-    
+
     public static function listarNoticias() {
         $sql = new Sql();
         return $sql->select("SELECT * FROM noticias ORDER BY id");
     }
-    
+
     public static function buscar($valor) {
         $sql = new Sql();
         return $sql->select("SELECT * FROM noticias WHERE titulo_noticia LIKE :PALAVRA OR texto_noticia LIKE :PALAVRA ORDER BY id DESC", array(
-            ":PALAVRA"=>"%$valor%"
+                    ":PALAVRA" => "%$valor%"
         ));
-        
     }
     
+    public function setDados($dados) {
+        
+        $this->setId_noticia($dados["id"]);
+        $this->setAutor_noticia($dados["autor_noticia"]);
+        $this->setCat_id_noticia($dados["cat_id_noticia"]);
+        $this->setFoto_destaque_noticia($dados["foto_destaque_noticia"]);
+        $this->setTexto_noticia($dados["texto_noticia"]);
+        $this->setTitulo_noticia($dados["titulo_noticia"]);
+        $this->setUrl_noticia($dados["url_noticia"]);
+        $this->setData_noticia(new DateTime($dados["data_noticia"]));
+    }
+
 //    Métodos gets - serão usados para retornar os dados
-    
-    function getId_noticia(){
+
+    function getId_noticia() {
         return $this->id;
     }
+
     function getTitulo_noticia() {
         return $this->titulo_noticia;
     }
@@ -94,15 +99,17 @@ class Noticias {
     function getFoto_destaque_noticia() {
         return $this->foto_destaque_noticia;
     }
-    
-/*******************************************************************************/    
+
+    /*     * **************************************************************************** */
+
 //    Métodos privados - serão usados apenas nessa classe
-/*******************************************************************************/
-   
-    
-    private function setId_noticia($id){
+    /*     * **************************************************************************** */
+
+
+    private function setId_noticia($id) {
         $this->id = $id;
     }
+
     private function setTitulo_noticia($titulo_noticia) {
         $this->titulo_noticia = $titulo_noticia;
     }
@@ -130,5 +137,5 @@ class Noticias {
     private function setFoto_destaque_noticia($foto_destaque_noticia) {
         $this->foto_destaque_noticia = $foto_destaque_noticia;
     }
-    
+
 }
